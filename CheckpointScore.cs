@@ -5,33 +5,22 @@ using TMPro;
 
 public class CheckpointScore : MonoBehaviour
 {
-    public TextMeshProUGUI scoreText;
     public GameObject checkpointPrefab;
     public AudioSource checkpointAudio;
+    private GameManager gameManager; 
     bool m_HasAudioPlayed;
-    int score; 
 
     // Start is called before the first frame update
     void Start()
     {
-        score = 0;
-        scoreText.text = "Score: " + score;
         m_HasAudioPlayed = false;
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }   
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void AddScore(int earnedScore)
-    {
-        score = score + earnedScore;
-        scoreText.text = "Score: " + score;
-    }
     void OnTriggerEnter(Collider collision)
     {
+        int collisionScore = 5;
+
         if (collision.tag == "Player")
         {
             if (!m_HasAudioPlayed)
@@ -40,8 +29,13 @@ public class CheckpointScore : MonoBehaviour
                 m_HasAudioPlayed = true;
             }
 
-            AddScore(5);
+            gameManager.AddScore(collisionScore);
             Destroy(this.gameObject);
         }
+    }
+
+    void Update()
+    {
+
     }
 }
